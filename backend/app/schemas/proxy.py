@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import Optional
+from typing import Optional, List
 from enum import Enum
 
 
@@ -51,3 +51,19 @@ class ReplayRequest(BaseModel):
     modified_url: Optional[str] = None
     modified_headers: Optional[dict] = None
     modified_body_b64: Optional[str] = None
+
+
+class SystemProxyConfig(BaseModel):
+    host: Optional[str] = None
+    port: Optional[int] = None
+    bypass: List[str] = []
+
+
+class SystemProxyStatus(BaseModel):
+    supported: bool
+    enabled: bool
+    os: str
+    host: Optional[str] = None
+    port: Optional[int] = None
+    bypass: List[str] = []
+    message: Optional[str] = None

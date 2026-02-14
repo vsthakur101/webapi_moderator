@@ -89,3 +89,13 @@ export interface WebSocketMessage {
   type: 'new_request' | 'intercept' | 'proxy_status' | 'websocket_message';
   data: any;
 }
+
+export interface SystemProxyStatus {
+  supported: boolean;
+  enabled: boolean;
+  os: string;
+  host?: string | null;
+  port?: number | null;
+  bypass?: string[];
+  message?: string | null;
+}

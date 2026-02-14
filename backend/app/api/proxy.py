@@ -13,8 +13,16 @@ from app.schemas.proxy import (
     InterceptAction,
     InterceptActionType,
     ReplayRequest,
+    SystemProxyConfig,
+    SystemProxyStatus,
 )
 from app.proxy import proxy_manager
+from app.system_proxy import (
+    get_system_proxy_status,
+    enable_system_proxy,
+    disable_system_proxy,
+    SystemProxyError,
+)
 
 router = APIRouter()
 
@@ -136,3 +144,37 @@ async def get_certificate():
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to generate certificate: {str(e)}")
+
+
+@router.get("/system/status", response_model=SystemProxyStatus)
+async def system_proxy_status():
+    """Get system proxy status for host OS."""
+    try:
+        return get_system_proxy_status()
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.post("/system/enable", response_model=SystemProxyStatus)
+async def system_proxy_enable(config: SystemProxyConfig):
+    """Enable system proxy settings on the host OS."""
+    try:
+        host = config.host or proxy_manager.get_status().host
+        port = config.port or proxy_manager.get_status().port
+        bypass = config.bypass or []
+        return enable_system_proxy(host, port, bypass)
+    except SystemProxyError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.post("/system/disable", response_model=SystemProxyStatus)
+async def system_proxy_disable():
+    """Disable system proxy settings on the host OS."""
+    try:
+        return disable_system_proxy()
+    except SystemProxyError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

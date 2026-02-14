@@ -1,5 +1,12 @@
 import axios from 'axios';
-import type { Request, RequestListItem, Rule, RuleCreate, ProxyStatus } from '@/types';
+import type {
+  Request,
+  RequestListItem,
+  Rule,
+  RuleCreate,
+  ProxyStatus,
+  SystemProxyStatus,
+} from '@/types';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
@@ -121,5 +128,25 @@ export async function getCertificate(): Promise<{
   instructions: string;
 }> {
   const { data } = await api.get('/proxy/certificate');
+  return data;
+}
+
+// System proxy (host OS)
+export async function getSystemProxyStatus(): Promise<SystemProxyStatus> {
+  const { data } = await api.get('/proxy/system/status');
+  return data;
+}
+
+export async function enableSystemProxy(params: {
+  host?: string;
+  port?: number;
+  bypass?: string[];
+}): Promise<SystemProxyStatus> {
+  const { data } = await api.post('/proxy/system/enable', params);
+  return data;
+}
+
+export async function disableSystemProxy(): Promise<SystemProxyStatus> {
+  const { data } = await api.post('/proxy/system/disable');
   return data;
 }
