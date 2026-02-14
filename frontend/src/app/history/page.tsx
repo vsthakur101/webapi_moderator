@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -14,6 +14,12 @@ export default function HistoryPage() {
   const [selectedRequestId, setSelectedRequestId] = useState<string | null>(null);
   const [search, setSearch] = useState('');
   const [method, setMethod] = useState<string>('');
+
+  useEffect(() => {
+    const handleClearSelection = () => setSelectedRequestId(null);
+    window.addEventListener('app:clear-selection', handleClearSelection);
+    return () => window.removeEventListener('app:clear-selection', handleClearSelection);
+  }, []);
 
   const { data: requests = [], refetch, isLoading } = useQuery({
     queryKey: ['requests', { search, method, limit: 200 }],

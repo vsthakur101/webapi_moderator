@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -14,6 +15,13 @@ import { Plus, Pencil, Trash2, Shield } from 'lucide-react';
 export default function RulesPage() {
   const [editingRule, setEditingRule] = useState<Rule | null>(null);
   const [isCreating, setIsCreating] = useState(false);
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    if (searchParams.get('new') === '1' && !editingRule) {
+      setIsCreating(true);
+    }
+  }, [editingRule, searchParams]);
 
   const queryClient = useQueryClient();
 

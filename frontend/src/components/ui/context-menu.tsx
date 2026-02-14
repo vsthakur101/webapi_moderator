@@ -6,6 +6,7 @@ import { cn } from '@/lib/utils';
 interface ContextMenuProps {
   children: React.ReactNode;
   menu: React.ReactNode;
+  shouldOpen?: (e: React.MouseEvent) => boolean;
 }
 
 interface ContextMenuState {
@@ -14,7 +15,7 @@ interface ContextMenuState {
   y: number;
 }
 
-export function ContextMenu({ children, menu }: ContextMenuProps) {
+export function ContextMenu({ children, menu, shouldOpen }: ContextMenuProps) {
   const [state, setState] = React.useState<ContextMenuState>({
     isOpen: false,
     x: 0,
@@ -24,6 +25,10 @@ export function ContextMenu({ children, menu }: ContextMenuProps) {
   const menuRef = React.useRef<HTMLDivElement>(null);
 
   const handleContextMenu = (e: React.MouseEvent) => {
+    if (shouldOpen && !shouldOpen(e)) {
+      return;
+    }
+
     e.preventDefault();
 
     // Calculate position, ensuring menu stays within viewport

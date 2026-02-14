@@ -18,6 +18,20 @@ export default function InterceptPage() {
   const [activeRequest, setActiveRequest] = useState<InterceptedRequest | null>(null);
 
   useEffect(() => {
+    const handleInterceptUpdate = (event: Event) => {
+      const detail = (event as CustomEvent<boolean>).detail;
+      if (typeof detail !== 'boolean') return;
+
+      setProxyStatus((prev) =>
+        prev ? { ...prev, intercept_enabled: detail } : prev
+      );
+    };
+
+    window.addEventListener('proxy:intercept-updated', handleInterceptUpdate);
+    return () => window.removeEventListener('proxy:intercept-updated', handleInterceptUpdate);
+  }, []);
+
+  useEffect(() => {
     // Fetch initial status
     getProxyStatus().then(setProxyStatus);
 
