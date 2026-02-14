@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { Suspense, useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
@@ -12,7 +12,7 @@ import { getRules, createRule, updateRule, deleteRule, toggleRule } from '@/lib/
 import type { Rule, RuleCreate } from '@/types';
 import { Plus, Pencil, Trash2, Shield } from 'lucide-react';
 
-export default function RulesPage() {
+function RulesPageContent() {
   const [editingRule, setEditingRule] = useState<Rule | null>(null);
   const [isCreating, setIsCreating] = useState(false);
   const searchParams = useSearchParams();
@@ -199,5 +199,13 @@ export default function RulesPage() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function RulesPage() {
+  return (
+    <Suspense fallback={<div className="flex items-center justify-center h-full">Loading...</div>}>
+      <RulesPageContent />
+    </Suspense>
   );
 }
