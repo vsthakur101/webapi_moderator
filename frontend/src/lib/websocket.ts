@@ -71,7 +71,9 @@ class WebSocketClient {
 
   subscribe(handler: MessageHandler) {
     this.handlers.add(handler);
-    return () => this.handlers.delete(handler);
+    return () => {
+      this.handlers.delete(handler);
+    };
   }
 
   send(message: object) {
