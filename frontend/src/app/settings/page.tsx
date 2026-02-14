@@ -23,12 +23,21 @@ export default function SettingsPage() {
 
   useEffect(() => {
     getProxyStatus().then(setProxyStatus);
-    getSystemProxyStatus()
-      .then(setSystemProxy)
-      .catch((error) => {
-        console.error('Failed to load system proxy status:', error);
-        setSystemProxyError('System proxy status unavailable. Run the backend on the host OS to manage it.');
-      });
+    const loadSystemProxyStatus = () =>
+      getSystemProxyStatus()
+        .then(setSystemProxy)
+        .catch((error) => {
+          console.error('Failed to load system proxy status:', error);
+          setSystemProxyError('System proxy status unavailable. Run the backend on the host OS to manage it.');
+        });
+
+    loadSystemProxyStatus();
+
+    const interval = window.setInterval(() => {
+      loadSystemProxyStatus();
+    }, 10000);
+
+    return () => window.clearInterval(interval);
   }, []);
 
   const handleDownloadCertificate = async () => {
