@@ -53,6 +53,22 @@ npm install
 npm run dev
 ```
 
+## Host mode quick start (system proxy)
+If you want to enable system-wide interception (Burp-style), run the backend on the host OS.
+
+```bash
+bash scripts/dev-host.sh
+```
+
+To stop everything:
+```bash
+bash scripts/stop-host.sh
+```
+
+Notes:
+- The host-mode script stops any running `webapi_moderator_backend`/`webapi_moderator_frontend` Docker containers.
+- Use the Settings page to enable/disable the system proxy once the host backend is running.
+
 ## Notes
 - The backend auto-starts the proxy at startup.
 - WebSocket endpoint: `/ws`
