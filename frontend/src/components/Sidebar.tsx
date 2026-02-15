@@ -3,13 +3,21 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
-import { Activity, History, Shield, Settings, Zap } from 'lucide-react';
+import { Activity, History, Shield, Settings, Zap, Code, GitCompare, FolderOpen, Target, Crosshair, Shuffle, Globe, Search } from 'lucide-react';
 
 const navItems = [
   { href: '/', label: 'Dashboard', icon: Activity },
   { href: '/history', label: 'History', icon: History },
   { href: '/intercept', label: 'Intercept', icon: Zap },
   { href: '/rules', label: 'Rules', icon: Shield },
+  { href: '/decoder', label: 'Decoder', icon: Code },
+  { href: '/comparer', label: 'Comparer', icon: GitCompare },
+  { href: '/collections', label: 'Collections', icon: FolderOpen },
+  { href: '/target', label: 'Target', icon: Target },
+  { href: '/intruder', label: 'Intruder', icon: Crosshair },
+  { href: '/sequencer', label: 'Sequencer', icon: Shuffle },
+  { href: '/spider', label: 'Spider', icon: Globe },
+  { href: '/scanner', label: 'Scanner', icon: Search },
   { href: '/settings', label: 'Settings', icon: Settings },
 ];
 

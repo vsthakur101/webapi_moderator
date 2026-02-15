@@ -7,6 +7,9 @@ from app.database import init_db, async_session_maker
 from app.api import api_router
 from app.websocket import manager
 from app.proxy import proxy_manager
+from app.intruder import intruder_manager
+from app.spider.manager import spider_manager
+from app.scanner.manager import scanner_manager
 
 settings = get_settings()
 
@@ -18,6 +21,15 @@ async def lifespan(app: FastAPI):
 
     # Set dependencies for proxy manager
     proxy_manager.set_dependencies(async_session_maker, manager)
+
+    # Set dependencies for intruder manager
+    intruder_manager.set_dependencies(async_session_maker, manager)
+
+    # Set dependencies for spider manager
+    spider_manager.set_dependencies(async_session_maker, manager)
+
+    # Set dependencies for scanner manager
+    scanner_manager.set_dependencies(async_session_maker, manager)
 
     # Auto-start proxy
     await proxy_manager.start()
